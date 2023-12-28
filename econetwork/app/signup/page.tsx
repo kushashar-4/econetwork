@@ -27,46 +27,55 @@ export default function SignUp() {
 
   return (
     <div className="min-h-screen bg-green flex flex-col items-center justify-center">
-      <div className="flex justify-center items-center gap-12 bg-white rounded-2xl p-6">
-        <div className="flex flex-col items-start gap-4">
-          <p className="text-2xl font-bold">Sign up For Eco Network</p>
-          <p className="text-lg max-w-xs font-medium">
-            Be sure to sign up to participate in challenges, log your recycling,
-            and start an initiative!
-          </p>
-          <p className="text-md max-w-xs">
-            We offer an engaging and interactive way to promote healthy garbage
-            disposal habits. Through our point-based recycling system, we hope
-            to see you compete in our recycling competitions!
-          </p>
-        </div>
-        <div className="flex flex-col items-start gap-8">
-          <div className="flex flex-col gap-3">
-            <input type="name" placeholder="Name"></input>
-            <input
-              type="email"
-              placeholder="Email"
-              onChange={(e) => setEmail(e.target.value)}
-            ></input>
-            <input
-              type="password"
-              placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
-            ></input>
+      <div className="flex gap-6 flex-col bg-white rounded-2xl p-6">
+        <h1 className="text-2xl font-bold">Sign up For Eco Network</h1>
+        <div className="flex gap-6">
+          <div className="flex flex-col items-start gap-4 text-md">
+            <p className="max-w-xs">
+              Be sure to sign up to participate in challenges, log your
+              recycling, and start an initiative!
+            </p>
+            <p className="max-w-xs">
+              We offer an engaging and interactive way to promote healthy
+              garbage disposal habits. Through our point-based recycling system,
+              we hope to see you compete in our recycling competitions!
+            </p>
           </div>
-          <Button
-            className="bg-green w-max text-white"
-            size="md"
-            onClick={handleSignUp}
-          >
-            Sign Up
-          </Button>
-          <p className="text-sm text-black">
-            Have an account already?{" "}
-            <a href="/login" className="text-green">
-              Log In
-            </a>
-          </p>
+          <div className="w-0 border-r"></div>
+          <div className="flex flex-col items-start gap-2">
+            <div className="flex flex-col gap-1">
+              <input
+                type="name"
+                placeholder="Name"
+                className="px-2 py-1 rounded-lg border"
+              ></input>
+              <input
+                type="email"
+                placeholder="Email"
+                className="px-2 py-1 rounded-lg border"
+                onChange={(e) => setEmail(e.target.value)}
+              ></input>
+              <input
+                type="password"
+                placeholder="Password"
+                className="px-2 py-1 rounded-lg border"
+                onChange={(e) => setPassword(e.target.value)}
+              ></input>
+            </div>
+            <Button
+              className="bg-green w-max text-white"
+              size="md"
+              onClick={handleSignUp}
+            >
+              Sign Up
+            </Button>
+            <p className="text-sm text-black mt-auto">
+              Have an account already?{" "}
+              <a href="/login" className="text-green">
+                Log In
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </div>

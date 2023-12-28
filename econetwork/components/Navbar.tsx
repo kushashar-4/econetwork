@@ -11,23 +11,10 @@ import {
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebaseconfig";
 import { useEffect, useState } from "react";
+import { useGlobalContext } from "@/app/contexts/AuthContext";
 
 export default function NavbarComponent() {
-  const [user] = useAuthState(auth);
-  const [isUser, setIsUser] = useState(false);
-
-  useEffect(() => {
-    checkForUser();
-  });
-
-  const checkForUser = async () => {
-    if (user) {
-      setIsUser(true);
-      console.log(isUser);
-    } else {
-      console.log(isUser);
-    }
-  };
+  const uid = useGlobalContext();
 
   return (
     <Navbar className="bg-green">
@@ -36,8 +23,8 @@ export default function NavbarComponent() {
           ҉&nbsp;&nbsp;&nbsp;EcoNetwork
         </a>
       </NavbarContent>
-      <NavbarContent className="text-white text-md font-regular">
-        <div className="flex gap-8">
+      <NavbarContent className="text-white text-md">
+        <div className="md:flex hidden gap-8">
           <NavbarItem>
             <a href="#">About Us</a>
           </NavbarItem>
@@ -51,11 +38,11 @@ export default function NavbarComponent() {
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem>
-          {!isUser ? (
+          {!uid ? (
             <a href="/signup">
               <Button
                 size="md"
-                className="text-md font-bold bg-white text-green"
+                className="text-md font-medium bg-white text-green"
               >
                 Sign Up
               </Button>

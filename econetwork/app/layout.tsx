@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Rubik } from "next/font/google";
 import "./globals.css";
 import "atropos/css";
+import { GlobalContextProvider } from "./contexts/AuthContext";
 
 const rubik = Rubik({ subsets: ["latin"] });
 
@@ -16,7 +17,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${rubik.className} overflow-x-hidden`}>{children}</body>
+      <body className={`${rubik.className} overflow-x-hidden`}>
+        <GlobalContextProvider>{children}</GlobalContextProvider>
+      </body>
     </html>
   );
 }

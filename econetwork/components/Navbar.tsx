@@ -11,7 +11,7 @@ import {
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebaseconfig";
 import { useEffect, useState } from "react";
-import { useGlobalContext } from "@/app/contexts/AuthContext";
+import { useGlobalContext } from "@/contexts/AuthContext";
 
 export default function NavbarComponent() {
   const uid = useGlobalContext();

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Rubik } from "next/font/google";
 import "./globals.css";
 import "atropos/css";
-import { GlobalContextProvider } from "./contexts/AuthContext";
+import { GlobalContextProvider } from "../contexts/AuthContext";
 
 const rubik = Rubik({ subsets: ["latin"] });
 

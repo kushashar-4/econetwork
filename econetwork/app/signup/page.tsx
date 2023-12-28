@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@nextui-org/react";
+import { Button, Input } from "@nextui-org/react";
 import { useState, useEffect } from "react";
 import { auth } from "../firebaseconfig";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
@@ -42,25 +42,20 @@ export default function SignUp() {
             </p>
           </div>
           <div className="w-0 border-r"></div>
-          <div className="flex flex-col items-start gap-2">
-            <div className="flex flex-col gap-1">
-              <input
-                type="name"
-                placeholder="Name"
-                className="px-2 py-1 rounded-lg border"
-              ></input>
-              <input
+          <div className="flex flex-col items-start gap-4">
+            <div className="flex flex-col gap-2">
+              <Input
                 type="email"
                 placeholder="Email"
-                className="px-2 py-1 rounded-lg border"
                 onChange={(e) => setEmail(e.target.value)}
-              ></input>
-              <input
+                size="sm"
+              ></Input>
+              <Input
                 type="password"
-                placeholder="Password"
-                className="px-2 py-1 rounded-lg border"
+                label="Password"
                 onChange={(e) => setPassword(e.target.value)}
-              ></input>
+                size="sm"
+              ></Input>
             </div>
             <Button
               className="bg-green w-max text-white"

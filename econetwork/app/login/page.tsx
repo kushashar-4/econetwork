@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@nextui-org/react";
+import { Button, Input } from "@nextui-org/react";
 import { useState, useEffect } from "react";
 import { auth } from "../firebaseconfig";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
@@ -40,19 +40,20 @@ export default function LogIn() {
             to see you compete in our recycling competitions!
           </p>
         </div>
-        <div className="flex flex-col items-start gap-8">
-          <div className="flex flex-col gap-3">
-            <input type="name" placeholder="Name"></input>
-            <input
+        <div className="flex flex-col items-start gap-4">
+          <div className="flex flex-col gap-2">
+            <Input
               type="email"
-              placeholder="Email"
+              label="Email"
+              size="sm"
               onChange={(e) => setEmail(e.target.value)}
-            ></input>
-            <input
+            ></Input>
+            <Input
               type="password"
-              placeholder="Password"
+              label="Password"
+              size="sm"
               onChange={(e) => setPassword(e.target.value)}
-            ></input>
+            ></Input>
           </div>
           <Button
             className="bg-green w-max text-white"

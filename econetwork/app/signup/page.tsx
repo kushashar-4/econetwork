@@ -40,7 +40,7 @@ export default function SignUp() {
             to see you compete in our recycling competitions!
           </p>
         </div>
-        <div className="flex flex-col items-start gap-6">
+        <div className="flex flex-col items-start gap-8">
           <div className="flex flex-col gap-3">
             <input type="name" placeholder="Name"></input>
             <input
@@ -61,6 +61,12 @@ export default function SignUp() {
           >
             Sign Up
           </Button>
+          <p className="text-sm text-black">
+            Have an account already?{" "}
+            <a href="/login" className="text-green">
+              Log In
+            </a>
+          </p>
         </div>
       </div>
     </div>

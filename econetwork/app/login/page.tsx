@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { auth } from "../firebaseconfig";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
+import NavbarComponent from "@/components/Navbar";
 
 export default function LogIn() {
   const [email, setEmail] = useState("");
@@ -39,7 +40,7 @@ export default function LogIn() {
             to see you compete in our recycling competitions!
           </p>
         </div>
-        <div className="flex flex-col items-start gap-6">
+        <div className="flex flex-col items-start gap-8">
           <div className="flex flex-col gap-3">
             <input type="name" placeholder="Name"></input>
             <input
@@ -60,6 +61,12 @@ export default function LogIn() {
           >
             Log In
           </Button>
+          <p className="text-sm text-black">
+            Don't have an account yet?{" "}
+            <a href="/signup" className="text-green">
+              Sign Up
+            </a>
+          </p>
         </div>
       </div>
     </div>

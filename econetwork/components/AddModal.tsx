@@ -25,8 +25,14 @@ export default function AddModal(props: any) {
   const addData = async () => {
     const recyclingRef = ref(db, uid!);
 
-    await findPointValue();
-    console.log(pointValue);
+    for (let i = 0; i < recycleItems.length; i++) {
+      let comparisonValue = recycleItems[i].name;
+      if (comparisonValue == itemName) {
+        setPointValue(recycleItems[i].pointValue);
+        console.log(pointValue);
+        break;
+      }
+    }
 
     const recyclingObj = {
       itemName: itemName,
@@ -35,16 +41,6 @@ export default function AddModal(props: any) {
     };
 
     push(recyclingRef, recyclingObj);
-  };
-
-  const findPointValue = async () => {
-    for (let i = 0; i < recycleItems.length; i++) {
-      let comparisonValue = recycleItems[i].name;
-      if (comparisonValue == itemName) {
-        setPointValue(recycleItems[i].pointValue);
-        break;
-      }
-    }
   };
 
   return (

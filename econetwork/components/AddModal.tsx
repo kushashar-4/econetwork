@@ -34,7 +34,7 @@ export default function AddModal(props: any) {
     const recyclingObj = {
       itemName: itemName,
       itemCount: itemCount,
-      pointValue: pointValue,
+      pointValue: pointValue * (itemCount as any),
     };
 
     push(recyclingRef, recyclingObj);

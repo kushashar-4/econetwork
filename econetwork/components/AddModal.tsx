@@ -11,21 +11,33 @@ import {
   AutocompleteItem,
 } from "@nextui-org/react";
 import { recycleItems } from "@/utils/RecycleItems";
-import { db } from "@/app/firebaseconfig";
-import { collection, getDocs, addDoc, doc, setDoc } from "firebase/firestore";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useGlobalContext } from "@/contexts/AuthContext";
+import { db } from "@/app/firebaseconfig";
+import { push, ref } from "firebase/database";
 
 export default function AddModal(props: any) {
   const uid = useGlobalContext();
-  const [itemName, setItemName] = useState("");
-  const [pointValue, setPointValue] = useState("");
+  const [itemName, setItemName] = useState<React.Key>("");
+  const [itemCount, setItemCount] = useState<string>("");
+  const [pointValue, setPointValue] = useState<number>(0);
 
-  const addItem = async () => {
-    await setDoc(doc(db, "recycleItems", uid), {
+  const addData = async () => {
+    const recyclingRef = ref(db, uid!);
+
+    for (let i = 0; i < recycleItems.length; i++) {
+      if (recycleItems[i].name == itemName) {
+        setPointValue(recycleItems[i].pointValue);
+      }
+    }
+
+    const recyclingObj = {
       itemName: itemName,
+      itemCount: itemCount,
       pointValue: pointValue,
-    });
+    };
+
+    push(recyclingRef, recyclingObj);
   };
 
   return (
@@ -39,8 +51,8 @@ export default function AddModal(props: any) {
             <ModalBody>
               <Autocomplete
                 label="Choose an Item"
-                onChange={(e) => {
-                  setItemName(e.target.value);
+                onSelectionChange={(key: React.Key) => {
+                  setItemName(key);
                 }}
               >
                 {recycleItems.map((recycleItem) => (
@@ -56,7 +68,7 @@ export default function AddModal(props: any) {
                 label="Amount"
                 type="number"
                 onChange={(e) => {
-                  setPointValue(e.target.value);
+                  setItemCount(e.target.value);
                 }}
               ></Input>
             </ModalBody>
@@ -67,8 +79,8 @@ export default function AddModal(props: any) {
               <Button
                 color="primary"
                 onPress={onClose}
-                onClick={addItem}
                 className="bg-green"
+                onClick={addData}
               >
                 Recycle
               </Button>

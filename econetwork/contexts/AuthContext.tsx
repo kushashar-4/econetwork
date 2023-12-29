@@ -9,7 +9,6 @@ import {
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../app/firebaseconfig";
 import { collection } from "firebase/firestore";
-import { db } from "../app/firebaseconfig";
 
 const GlobalContext = createContext(null as string | null);
 

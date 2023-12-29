@@ -11,7 +11,7 @@ import {
   AutocompleteItem,
 } from "@nextui-org/react";
 import { recycleItems } from "@/utils/RecycleItems";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useGlobalContext } from "@/contexts/AuthContext";
 import { db } from "@/app/firebaseconfig";
 import { push, ref } from "firebase/database";
@@ -25,11 +25,8 @@ export default function AddModal(props: any) {
   const addData = async () => {
     const recyclingRef = ref(db, uid!);
 
-    for (let i = 0; i < recycleItems.length; i++) {
-      if (recycleItems[i].name == itemName) {
-        setPointValue(recycleItems[i].pointValue);
-      }
-    }
+    await findPointValue();
+    console.log(pointValue);
 
     const recyclingObj = {
       itemName: itemName,
@@ -38,6 +35,16 @@ export default function AddModal(props: any) {
     };
 
     push(recyclingRef, recyclingObj);
+  };
+
+  const findPointValue = async () => {
+    for (let i = 0; i < recycleItems.length; i++) {
+      let comparisonValue = recycleItems[i].name;
+      if (comparisonValue == itemName) {
+        setPointValue(recycleItems[i].pointValue);
+        break;
+      }
+    }
   };
 
   return (

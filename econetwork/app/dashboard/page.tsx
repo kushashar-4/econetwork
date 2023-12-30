@@ -7,10 +7,27 @@ import { useGlobalContext } from "../../contexts/AuthContext";
 import AddModal from "@/components/AddModal";
 import { Button, useDisclosure } from "@nextui-org/react";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
+import { ref, onValue } from "firebase/database";
+import { db } from "@/app/firebaseconfig";
 
-export default function Dashboard() {
+export default function Dashboard(props: any) {
   const uid = useGlobalContext();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  let recycleItemsArr;
+
+  const loadData = async () => {
+    const recyclingRef = ref(db, uid!);
+    onValue(recyclingRef, (snapshot) => {
+      if (snapshot.exists()) {
+        recycleItemsArr = Object.entries(snapshot.val());
+        console.log(recycleItemsArr);
+      }
+    });
+  };
+
+  useEffect(() => {
+    loadData();
+  });
 
   return uid ? (
     <div className="bg-green min-h-screen flex flex-col items-center gap-8">

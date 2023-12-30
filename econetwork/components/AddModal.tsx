@@ -20,7 +20,7 @@ export default function AddModal(props: any) {
   const uid = useGlobalContext();
   const [itemName, setItemName] = useState<React.Key>("");
   const [itemCount, setItemCount] = useState<string>("");
-  const [pointValue, setPointValue] = useState<number>(0);
+  let pointValue = 0;
 
   const addData = async () => {
     const recyclingRef = ref(db, uid!);
@@ -28,7 +28,7 @@ export default function AddModal(props: any) {
     for (let i = 0; i < recycleItems.length; i++) {
       let comparisonValue = recycleItems[i].name;
       if (comparisonValue == itemName) {
-        setPointValue(recycleItems[i].pointValue);
+        pointValue = recycleItems[i].pointValue;
         console.log(pointValue);
         break;
       }

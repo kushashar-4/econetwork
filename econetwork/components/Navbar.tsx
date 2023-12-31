@@ -19,7 +19,7 @@ export default function NavbarComponent() {
   return (
     <Navbar className="bg-green">
       <NavbarContent justify="start">
-        <a className="text-white text-2xl font-bold">
+        <a href="/" className="text-white text-2xl font-bold">
           ҉&nbsp;&nbsp;&nbsp;EcoNetwork
         </a>
       </NavbarContent>
@@ -29,10 +29,10 @@ export default function NavbarComponent() {
             <a href="#">About Us</a>
           </NavbarItem>
           <NavbarItem>
-            <a href="#">Programs</a>
+            <a href="#">Guide</a>
           </NavbarItem>
           <NavbarItem>
-            <a href="#">Leaderboard</a>
+            <a href="/leaderboard">Leaderboard</a>
           </NavbarItem>
         </div>
       </NavbarContent>

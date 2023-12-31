@@ -1,22 +1,40 @@
 "use client";
-import NavbarComponent from "@/components/Navbar";
+
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../firebaseconfig";
 import { useEffect, useState } from "react";
 import { useGlobalContext } from "../../contexts/AuthContext";
+
 import AddModal from "@/components/AddModal";
 import { Button, useDisclosure } from "@nextui-org/react";
-import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
+import NavbarComponent from "@/components/Navbar";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+} from "@nextui-org/react";
+import { Spinner } from "@nextui-org/react";
+
 import { ref, onValue } from "firebase/database";
 import { db } from "@/app/firebaseconfig";
+import { auth } from "../firebaseconfig";
+import React from "react";
 
 export default function Dashboard(props: any) {
   const uid = useGlobalContext();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   let recycleItemsArr;
 
-  const loadData = async () => {
+  const loadData = () => {
+    console.log(uid);
     const recyclingRef = ref(db, uid!);
+
     onValue(recyclingRef, (snapshot) => {
       if (snapshot.exists()) {
         recycleItemsArr = Object.entries(snapshot.val());
@@ -26,8 +44,10 @@ export default function Dashboard(props: any) {
   };
 
   useEffect(() => {
+    if (!uid) return;
+
     loadData();
-  });
+  }, [uid]);
 
   return uid ? (
     <div className="bg-green min-h-screen flex flex-col items-center gap-8">
@@ -50,7 +70,7 @@ export default function Dashboard(props: any) {
               <p className="text-green text-lg font-medium">Point Statistics</p>
             </div>
           </div>
-          <div>
+          <div className="flex justify-center gap-4">
             <Button
               size="md"
               onPress={onOpen}
@@ -58,11 +78,53 @@ export default function Dashboard(props: any) {
             >
               Recycle an Item
             </Button>
+            <AddPersonalGoal></AddPersonalGoal>
           </div>
         </div>
       </section>
 
       <AddModal isOpen={isOpen} onOpenChange={onOpenChange}></AddModal>
     </div>
-  ) : null;
+  ) : (
+    <Spinner />
+  );
+}
+
+function AddPersonalGoal(props: any) {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  return (
+    <>
+      <Button
+        size="md"
+        onPress={onOpen}
+        className="font-medium text-white text-md bg-green"
+      >
+        Recycle an Item
+      </Button>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1 text-green text-xl">
+                Set a Goal
+              </ModalHeader>
+              <ModalBody>
+                <Input type="number" label="Point Amount"></Input>
+                <Input type="number" label="Day Limit"></Input>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Cancel
+                </Button>
+                <Button color="primary" onPress={onClose} className="bg-green">
+                  Set
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </>
+  );
 }

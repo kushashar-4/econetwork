@@ -11,28 +11,24 @@ import {
   AutocompleteItem,
 } from "@nextui-org/react";
 import { recycleItems } from "@/utils/RecycleItems";
+
 import React, { useEffect, useState } from "react";
 import { useGlobalContext } from "@/contexts/AuthContext";
+
 import { db } from "@/app/firebaseconfig";
 import { push, ref } from "firebase/database";
+import { groupBy } from "lodash";
 
 export default function AddModal(props: any) {
   const uid = useGlobalContext();
   const [itemName, setItemName] = useState<React.Key>("");
   const [itemCount, setItemCount] = useState<string>("");
-  let pointValue = 0;
 
   const addData = async () => {
     const recyclingRef = ref(db, uid!);
 
-    for (let i = 0; i < recycleItems.length; i++) {
-      let comparisonValue = recycleItems[i].name;
-      if (comparisonValue == itemName) {
-        pointValue = recycleItems[i].pointValue;
-        console.log(pointValue);
-        break;
-      }
-    }
+    const pointValue = recycleItems.find((item) => item.name === itemName)
+      ?.pointValue as number;
 
     const recyclingObj = {
       itemName: itemName,
@@ -58,14 +54,22 @@ export default function AddModal(props: any) {
                   setItemName(key);
                 }}
               >
-                {recycleItems.map((recycleItem) => (
-                  <AutocompleteItem
-                    key={recycleItem.name}
-                    value={recycleItem.pointValue}
-                  >
-                    {recycleItem.name}
-                  </AutocompleteItem>
-                ))}
+                {Object.keys(groupBy(recycleItems, "pointValue")).map(
+                  (pointValue) => (
+                    <AutocompleteSection
+                      title={`${pointValue} points`}
+                      key={pointValue}
+                    >
+                      {groupBy(recycleItems, "pointValue")[pointValue].map(
+                        (item) => (
+                          <AutocompleteItem key={item.name}>
+                            {item.name}
+                          </AutocompleteItem>
+                        )
+                      )}
+                    </AutocompleteSection>
+                  )
+                )}
               </Autocomplete>
               <Input
                 label="Amount"

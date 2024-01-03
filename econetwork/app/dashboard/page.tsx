@@ -100,7 +100,7 @@ function AddPersonalGoal(props: any) {
         onPress={onOpen}
         className="font-medium text-white text-md bg-green"
       >
-        Recycle an Item
+        Set a Goal
       </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>

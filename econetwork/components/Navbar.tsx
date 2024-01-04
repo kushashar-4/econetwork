@@ -12,9 +12,14 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebaseconfig";
 import { useEffect, useState } from "react";
 import { useGlobalContext } from "@/contexts/AuthContext";
+import { signOut } from "firebase/auth";
 
 export default function NavbarComponent() {
   const uid = useGlobalContext();
+
+  const handleLogOut = async () => {
+    signOut(auth);
+  };
 
   return (
     <Navbar className="bg-green">
@@ -48,14 +53,23 @@ export default function NavbarComponent() {
               </Button>
             </a>
           ) : (
-            <a href="/dashboard">
+            <div className="flex justify-center gap-4">
+              <a href="/dashboard">
+                <Button
+                  size="md"
+                  className="text-md font-bold bg-white text-green"
+                >
+                  Dashboard
+                </Button>
+              </a>
               <Button
                 size="md"
                 className="text-md font-bold bg-white text-green"
+                onPress={handleLogOut}
               >
-                Dashboard
+                Log Out
               </Button>
-            </a>
+            </div>
           )}
         </NavbarItem>
       </NavbarContent>

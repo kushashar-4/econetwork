@@ -8,48 +8,30 @@ import AddModal from "@/components/AddModal";
 import { Button, useDisclosure } from "@nextui-org/react";
 import NavbarComponent from "@/components/Navbar";
 import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
   Input,
   Modal,
   ModalBody,
   ModalContent,
   ModalHeader,
   ModalFooter,
+  Progress,
 } from "@nextui-org/react";
 import { Spinner } from "@nextui-org/react";
-
-import { ref, onValue } from "firebase/database";
-import { db } from "@/app/firebaseconfig";
-import { auth } from "../firebaseconfig";
 import React from "react";
+import { ref, push } from "firebase/database";
+import { db } from "../firebaseconfig";
 
 export default function Dashboard(props: any) {
-  const uid = useGlobalContext();
+  const { userId, totalPoints, personalGoals, setPersonalGoals } =
+    useGlobalContext()!;
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  let recycleItemsArr;
-
-  const loadData = () => {
-    console.log(uid);
-    const recyclingRef = ref(db, uid!);
-
-    onValue(recyclingRef, (snapshot) => {
-      if (snapshot.exists()) {
-        recycleItemsArr = Object.entries(snapshot.val());
-        console.log(recycleItemsArr);
-      }
-    });
-  };
+  const recyclingRef = ref(db, userId!);
 
   useEffect(() => {
-    if (!uid) return;
+    console.log(personalGoals);
+  }, [personalGoals]);
 
-    loadData();
-  }, [uid]);
-
-  return uid ? (
+  return userId ? (
     <div className="bg-green min-h-screen flex flex-col items-center gap-8">
       <NavbarComponent></NavbarComponent>
       <section className="py-6">
@@ -78,7 +60,10 @@ export default function Dashboard(props: any) {
             >
               Recycle an Item
             </Button>
-            <AddPersonalGoal></AddPersonalGoal>
+            <AddPersonalGoal
+              personalGoals={personalGoals}
+              setPersonalGoals={setPersonalGoals}
+            ></AddPersonalGoal>
           </div>
         </div>
       </section>
@@ -86,12 +71,46 @@ export default function Dashboard(props: any) {
       <AddModal isOpen={isOpen} onOpenChange={onOpenChange}></AddModal>
     </div>
   ) : (
-    <Spinner />
+    <div className="flex flex-col min-h-screen items-center justify-center bg-green">
+      <Spinner color="white" size="lg" />
+    </div>
+  );
+}
+
+function PersonalGoalDisplay(props: any) {
+  return (
+    <Progress
+      size="md"
+      radius="sm"
+      classNames={{
+        base: "max-w-md",
+        track: "drop-shadow-md border border-default",
+        indicator: "bg-gradient-to-r from-pink-500 to-yellow-500",
+        label: "tracking-wider font-medium text-default-600",
+        value: "text-foreground/60",
+      }}
+      label="Goal Progress"
+      value={props.totalPoints}
+      maxValue={props.maxValue}
+    ></Progress>
   );
 }
 
 function AddPersonalGoal(props: any) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [number, setNumber] = useState<number>();
+  const [dayLimit, setDayLimit] = useState<number>();
+  const { userId, totalPoints, personalGoals, setPersonalGoals } =
+    useGlobalContext()!;
+
+  const handleGoalAdd = async () => {
+    const dataObj = {
+      number,
+      dayLimit,
+    };
+
+    setPersonalGoals((p: any[]) => [...p, dataObj]);
+  };
 
   return (
     <>
@@ -110,14 +129,31 @@ function AddPersonalGoal(props: any) {
                 Set a Goal
               </ModalHeader>
               <ModalBody>
-                <Input type="number" label="Point Amount"></Input>
-                <Input type="number" label="Day Limit"></Input>
+                <Input
+                  type="number"
+                  label="Point Amount"
+                  onChange={(e) => {
+                    setNumber(parseInt(e.target.value));
+                  }}
+                ></Input>
+                <Input
+                  type="number"
+                  label="Day Limit"
+                  onChange={(e) => {
+                    setDayLimit(parseInt(e.target.value));
+                  }}
+                ></Input>
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
                   Cancel
                 </Button>
-                <Button color="primary" onPress={onClose} className="bg-green">
+                <Button
+                  color="primary"
+                  onPress={onClose}
+                  className="bg-green"
+                  onClick={handleGoalAdd}
+                >
                   Set
                 </Button>
               </ModalFooter>

@@ -18,18 +18,16 @@ import {
 } from "@nextui-org/react";
 import { Spinner } from "@nextui-org/react";
 import React from "react";
-import { ref, push } from "firebase/database";
+import { ref, push, set } from "firebase/database";
 import { db } from "../firebaseconfig";
 
 export default function Dashboard(props: any) {
-  const { userId, totalPoints, personalGoals, setPersonalGoals } =
-    useGlobalContext()!;
+  const { userId, totalPoints, personalGoalsArr } = useGlobalContext()!;
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const recyclingRef = ref(db, userId!);
 
   useEffect(() => {
-    console.log(personalGoals);
-  }, [personalGoals]);
+    console.log(totalPoints);
+  });
 
   return userId ? (
     <div className="bg-green min-h-screen flex flex-col items-center gap-8">
@@ -49,7 +47,10 @@ export default function Dashboard(props: any) {
               </p>
             </div>
             <div className="flex flex-col items-center">
-              <p className="text-green text-lg font-medium">Point Statistics</p>
+              <PersonalGoalDisplay
+                totalPoints={totalPoints}
+                maxValue={10000}
+              ></PersonalGoalDisplay>
             </div>
           </div>
           <div className="flex justify-center gap-4">
@@ -60,10 +61,7 @@ export default function Dashboard(props: any) {
             >
               Recycle an Item
             </Button>
-            <AddPersonalGoal
-              personalGoals={personalGoals}
-              setPersonalGoals={setPersonalGoals}
-            ></AddPersonalGoal>
+            <AddPersonalGoal userId={userId}></AddPersonalGoal>
           </div>
         </div>
       </section>
@@ -80,7 +78,7 @@ export default function Dashboard(props: any) {
 function PersonalGoalDisplay(props: any) {
   return (
     <Progress
-      size="md"
+      size="lg"
       radius="sm"
       classNames={{
         base: "max-w-md",
@@ -92,6 +90,7 @@ function PersonalGoalDisplay(props: any) {
       label="Goal Progress"
       value={props.totalPoints}
       maxValue={props.maxValue}
+      showValueLabel={true}
     ></Progress>
   );
 }
@@ -100,16 +99,15 @@ function AddPersonalGoal(props: any) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [number, setNumber] = useState<number>();
   const [dayLimit, setDayLimit] = useState<number>();
-  const { userId, totalPoints, personalGoals, setPersonalGoals } =
-    useGlobalContext()!;
+  const recyclingRef = ref(db, props.userId + "/" + "personalGoals");
 
   const handleGoalAdd = async () => {
-    const dataObj = {
+    const personalGoals = {
       number,
       dayLimit,
     };
 
-    setPersonalGoals((p: any[]) => [...p, dataObj]);
+    push(recyclingRef, personalGoals);
   };
 
   return (

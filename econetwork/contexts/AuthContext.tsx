@@ -15,8 +15,7 @@ import { db } from "../app/firebaseconfig";
 type contextType = {
   userId: string | null;
   totalPoints: number;
-  personalGoals: Record<string, any>[];
-  setPersonalGoals: any;
+  personalGoalsArr: any;
 };
 
 const GlobalContext = createContext(null as contextType | null);
@@ -26,22 +25,15 @@ export const GlobalContextProvider = ({ children }: { children: any }) => {
   const userId = user?.uid;
   const recyclingRef = ref(db, userId!);
   let totalPoints = 0;
-  const [personalGoals, setPersonalGoals] = useState([]);
+
+  const personalGoalsRef = ref(db, userId + "/" + "personalGoals");
+  let personalGoalsArr: [string, unknown][] = [];
 
   const calculatePoints = async (arr: [string, any][]) => {
     for (let i = 0; i < arr.length; i++) {
       const points = parseInt(arr[i][1].pointValue);
       totalPoints += points;
     }
-
-    // console.log(totalPoints);
-    // const userIndex = recycleItemsArr.findIndex(
-    //   (item: any) => Array.isArray(item) && item[0] === userId
-    // );
-    // for (let i = 0; i < recycleItemsArr.length; i++) {
-    //   console.log(recycleItemsArr[i]);
-
-    // }
   };
 
   onValue(recyclingRef, (snapshot) => {
@@ -51,11 +43,16 @@ export const GlobalContextProvider = ({ children }: { children: any }) => {
     }
   });
 
+  onValue(personalGoalsRef, (snapshot) => {
+    if (snapshot.exists()) {
+      personalGoalsArr = Object.entries(snapshot.val());
+    }
+  });
+
   const returnValues = {
     userId: userId || null,
     totalPoints,
-    personalGoals,
-    setPersonalGoals,
+    personalGoalsArr,
   };
 
   return (

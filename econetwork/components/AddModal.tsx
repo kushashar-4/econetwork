@@ -20,12 +20,12 @@ import { push, ref } from "firebase/database";
 import { groupBy } from "lodash";
 
 export default function AddModal(props: any) {
-  const uid = useGlobalContext();
+  const { userId } = useGlobalContext()!;
   const [itemName, setItemName] = useState<React.Key>("");
   const [itemCount, setItemCount] = useState<string>("");
 
   const addData = async () => {
-    const recyclingRef = ref(db, uid!);
+    const recyclingRef = ref(db, userId!);
 
     const pointValue = recycleItems.find((item) => item.name === itemName)
       ?.pointValue as number;

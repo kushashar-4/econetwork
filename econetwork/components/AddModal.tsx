@@ -25,7 +25,7 @@ export default function AddModal(props: any) {
   const [itemCount, setItemCount] = useState<string>("");
 
   const addData = async () => {
-    const recyclingRef = ref(db, userId!);
+    const recyclingRef = ref(db, userId! + "/" + "recycleItems");
 
     const pointValue = recycleItems.find((item) => item.name === itemName)
       ?.pointValue as number;

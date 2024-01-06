@@ -18,15 +18,20 @@ import {
 } from "@nextui-org/react";
 import { Spinner } from "@nextui-org/react";
 import React from "react";
-import { ref, push, set } from "firebase/database";
+import { ref, push, set, onValue } from "firebase/database";
 import { db } from "../firebaseconfig";
 
 export default function Dashboard(props: any) {
-  const { userId, totalPoints, personalGoalsArr } = useGlobalContext()!;
+  const { userId, totalPoints, personalGoalsArr, recyclingItemsArr } =
+    useGlobalContext()!;
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const recyclingRef = ref(db, userId! + "/" + "recycleItems");
+  let recyclingItems: [string, unknown][] = [];
 
   useEffect(() => {
-    console.log(totalPoints);
+    onValue(recyclingRef, (snapshot) => {
+      console.log(Object.entries(snapshot.val()));
+    });
   });
 
   return userId ? (

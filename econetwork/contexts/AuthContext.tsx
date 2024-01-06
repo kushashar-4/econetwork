@@ -7,6 +7,7 @@ import {
   Dispatch,
   SetStateAction,
   useState,
+  useEffect,
 } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../app/firebaseconfig";
@@ -16,6 +17,7 @@ type contextType = {
   userId: string | null;
   totalPoints: number;
   personalGoalsArr: any;
+  recyclingItemsArr: any;
 };
 
 const GlobalContext = createContext(null as contextType | null);
@@ -23,25 +25,25 @@ const GlobalContext = createContext(null as contextType | null);
 export const GlobalContextProvider = ({ children }: { children: any }) => {
   const [user] = useAuthState(auth);
   const userId = user?.uid;
-  const recyclingRef = ref(db, userId!);
-  let totalPoints = 0;
+  const recyclingRef = ref(db, userId + "/" + "recycleItems");
 
   const personalGoalsRef = ref(db, userId + "/" + "personalGoals");
   let personalGoalsArr: [string, unknown][] = [];
 
-  const calculatePoints = async (arr: [string, any][]) => {
-    for (let i = 0; i < arr.length; i++) {
-      const points = parseInt(arr[i][1].pointValue);
-      totalPoints += points;
-    }
-  };
+  const [recyclingItemsArr, setRecyclingItemsArr] = useState<
+    [string, number][]
+  >([]);
+  const [totalPoints, setTotalPoints] = useState(0);
 
-  onValue(recyclingRef, (snapshot) => {
-    if (snapshot.exists()) {
-      const recycleItemsArr = Object.entries(snapshot.val());
-      calculatePoints(recycleItemsArr);
-    }
-  });
+  // onValue(recyclingRef, (snapshot) => {
+  //   if (snapshot.exists()) {
+  //     console.log("exists");
+  //     const items = Object.entries(snapshot.val()) as [string, number][];
+
+  //     setRecyclingItemsArr(items);
+  //     setTotalPoints(items.reduce((a, c) => a + c[1], 0));
+  //   }
+  // });
 
   onValue(personalGoalsRef, (snapshot) => {
     if (snapshot.exists()) {
@@ -53,6 +55,7 @@ export const GlobalContextProvider = ({ children }: { children: any }) => {
     userId: userId || null,
     totalPoints,
     personalGoalsArr,
+    recyclingItemsArr,
   };
 
   return (

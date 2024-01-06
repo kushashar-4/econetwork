@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Navbar,
   NavbarBrand,
@@ -14,11 +16,15 @@ import { useEffect, useState } from "react";
 import { useGlobalContext } from "@/contexts/AuthContext";
 import { signOut } from "firebase/auth";
 
+import { useRouter } from "next/navigation";
+
 export default function NavbarComponent() {
   const uid = useGlobalContext();
+  const router = useRouter();
 
   const handleLogOut = async () => {
     signOut(auth);
+    router.push("/login");
   };
 
   return (
